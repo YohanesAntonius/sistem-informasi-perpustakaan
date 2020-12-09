@@ -23,7 +23,7 @@ class CreateEmployeesTable extends Migration
             $table->char('cellphone');
             $table->string('agama');
             $table->string('email')->unique();
-            $table->foreignId('id_pendidikan_terakhir');
+            $table->foreignId('pendidikan_id')->unique();
             $table->string('aktif');
             $table->string('username');
             $table->string('password');

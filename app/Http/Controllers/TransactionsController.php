@@ -3,58 +3,118 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use App\Models\User;
+use App\Exports\TransactionsExport;
+use App\Models\Books;
+use App\Models\Members;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 class TransactionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     //buat method index
     public function index(Request $request)
     {
-        $transactions = Transactions::all();
-        return view('transactions.index' , compact('transactions'));
+        if(Auth::user()->role == 'anggota')
+        {
+            $datas = Transactions::where('members_id', Auth::user()->members->id)
+                                  ->get();
+        } else {
+            $datas = Transactions::get();
+        }
+        // $transactions = Transactions::all();
+        return view('transactions.index' , compact('datas'));
     }
 
     public function create()
     {
-        return view('transactions.create');
+        $getRow = Transactions::orderBy('id', 'DESC')->get();
+        $rowCount = $getRow->count();
+
+        $lastId = $getRow->first();
+
+        $kode = "TR00001";
+
+        if ($rowCount > 0) {
+            if ($lastId->id < 9) {
+                    $kode = "TR0000".''.($lastId->id + 1);
+            } else if ($lastId->id < 99) {
+                    $kode = "TR000".''.($lastId->id + 1);
+            } else if ($lastId->id < 999) {
+                    $kode = "TR00".''.($lastId->id + 1);
+            } else if ($lastId->id < 9999) {
+                    $kode = "TR0".''.($lastId->id + 1);
+            } else {
+                    $kode = "TR".''.($lastId->id + 1);
+            }
+        }
+
+        $books = Books::where('jumlah_buku', '>', 0)->get();
+        $members = Members::get();
+        return view('transactions.create', compact('books', 'kode', 'members'));
     }
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'judul' => 'required',
-        //     'nim' => 'required|max:10',
-        //     'tanggal_pinjam' => 'required',
-        //     'tanggal_kembali' => 'required',
-        //     'status' => 'required'
-        // ]);
+        $this->validate($request, [
+            'kode_transaksi' => 'required|string|max:255',
+            'members_id' => 'required',
+            'books_id' => 'required',
+            'tanggal_pinjam' => 'required',
+            'tanggal_kembali' => 'required',
+            'status' => 'required'
+        ]);
 
-        Transactions::create($request->all());
+        $transaksi = Transactions::create([
+            'kode_transaksi' => $request->get('kode_transaksi'),
+            'members_id' => $request->get('members_id'),
+            'books_id' => $request->get('books_id'),
+            'tanggal_pinjam' => $request->get('tanggal_pinjam'),
+            'tanggal_kembali' => $request->get('tanggal_kembali'),
+            'status' => 'pinjam'
+        ]);
+
+        $transaksi->books->where('id', $transaksi->books_id)
+                         ->update([
+                             'jumlah_buku' => ($transaksi->books->jumlah_buku - 1),
+                         ]);
+        // Transactions::create($request->all());
         return redirect('/transactions')->with('pesan', 'Data peminjaman berhasil ditambahkan');
     }
 
     public function show(Transactions $transactions)
     {
-       //
+        //
     }
 
-    public function edit(Transactions $transactions)
+    public function edit($id)
     {
-       Transactions::find($transactions);
-       return view('transactions.edit', compact('transactions'));
+        $transaksi = Transactions::findOrFail($id);
+
+        if((Auth::user()->role == 'anggota') && (Auth::user()->members->id != $transaksi->members_id)) {
+            return redirect('/transactions')->with('pesan', 'Dilarang masuk');
+    }
+        return view('books.edit', compact('data'));
     }
 
-    public function update(Request $request, Transactions $transactions)
+    public function update(Request $request, $id)
     {
-       Transactions::where('id', $transactions->id)
-       ->update([
-            'judul' => $request->id_books,
-            'nim' => $request->nim,
-            'nama' => $request->nama,
-            'tanggal_pinjam' => $request->tanggal_pinjam,
-            'tanggal_kembali' => $request->tanggal_kembali,
-            'status' => $request->status
-       ]);
+       $transaksi = Transactions::find($id);
+
+       $transaksi->update([
+                    'status' => 'kembali'
+                ]);
+
+        $transaksi->books->where('id', $transaksi->books->id)
+                         ->update([
+                             'jumlah_buku' => ($transaksi->books->jumlah_buku + 1),
+                         ]);
 
         return redirect('/transactions')->with('pesan','Data peminjaman berhasil diubah');
     }
@@ -65,16 +125,15 @@ class TransactionsController extends Controller
         return redirect('/transactions')->with('pesan','Data peminjaman berhasil dihapus');
     }
 
-    public function back(Transactions $transactions)
+    public function exportExcel()
     {
-        Transactions::back($transactions->id);
-        return redirect('/transactions')->with('pesan','Buku berhasil dikembalikan');
+        return Excel::download(new TransactionsExport, 'transactions.xlsx');
     }
 
-    public function extend(Transactions $transactions)
-    {
-        Transactions::extend($transactions->id);
-        return redirect('/transactions')->with('pesan','Buku berhasil diperpanjang');
-    }
+    // public function exportPdf()
+    // {
+    //     $pdf = PDF::loadHTML('<h1>DATA TRANSAKSI</h1>');
+    //     return $pdf->download('transactions.pdf');
+    // }
 
 }

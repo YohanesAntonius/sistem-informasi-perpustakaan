@@ -20,7 +20,10 @@ class UserSeeder extends Seeder
             'name'  =>  'Yohanes Antonius',
             'email' =>  'antoniusyohan22@gmail.com',
             'password' =>  bcrypt('yohan'),
-            'remember_token' =>  Str::random(10)
+            'remember_token' =>  Str::random(10),
+            'created_at'      => \Carbon\Carbon::now(),
+            'updated_at'      => \Carbon\Carbon::now()
+
         ]);
     }
 }

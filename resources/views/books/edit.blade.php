@@ -7,7 +7,7 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Tambah Data</h4>
@@ -51,7 +51,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group bmd-form-group">
                                         <label for="isbn" class="bmd-label-floating">Isbn</label>
-                                        <input type="number" id="isbn" name="isbn" class="form-control"
+                                        <input type="text" id="isbn" name="isbn" class="form-control"
                                         value="{{$books->isbn}}">
                                     </div>
                                 </div>

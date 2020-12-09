@@ -32,7 +32,7 @@ class EmployeesController extends Controller
             'cellphone'=> 'required|max:12',
             'agama' => 'required|max:10',
             'email' => 'required|max:20',
-            'id_pendidikan_terakhir' => 'required|max:1',
+            'pendidikan_id' => 'required|max:1',
             'aktif' => 'required|max:1',
             'username' => 'required|max:10',
             'password' => 'required|max:20'
@@ -52,7 +52,7 @@ class EmployeesController extends Controller
         return redirect('/employees')->with('pesan', 'Ditambahkan');
 
         // Employees::create($request->all());
-        // return redirect('/employees');
+        // return redirect('/employee');
     }
 
     public function show(Employees $employees)
@@ -77,7 +77,7 @@ class EmployeesController extends Controller
             'cellphone' => $request->cellphone,
             'agama' => $request->agama,
             'email' => $request->email,
-            'id_pendidikan_terakhir' => $request->id_pendidikan_terakhir,
+            'pendidikan_id' => $request->pendidikan_id,
             'aktif' => $request->aktif,
             'username' => $request->username,
             'password' => $request->password

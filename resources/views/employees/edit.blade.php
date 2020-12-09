@@ -7,11 +7,11 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Tambah Data</h4>
-                        <p class="card-category">Lengkapi data Anda terlebih dahulu</p>
+                        {{-- <p class="card-category">Lengkapi data Anda terlebih dahulu</p> --}}
                     </div>
                     <div class="card-body">
                         <form method="POST" action="/employees/{{ $employees->id }}" enctype="multipart/form-data">
@@ -71,9 +71,21 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group bmd-form-group">
-                                        <label for="id_pendidikan_terakhir" class="bmd-label-floating">Pendidikan Terakhir</label>
-                                        <input type="text" id="id_pendidikan_terakhir" name="id_pendidikan_terakhir" class="form-control"
-                                        value="{{$employees->id_pendidikan_terakhir}}">
+                                        <label for="pendidikan_id" class="bmd-label-floating">Pendidikan Terakhir</label>
+                                        <br>
+                                        <select name="pendidikan_id" id="pendidikan_id" value="{{$employees->pendidikan_id}}"
+                                        class="form-control @error('pendidikan_id') is-invalid @enderror"
+                                        placeholder="Masukkan Pendidikan ...">
+                                        <option value="" disabled selected></option>
+                                        <option value="1" {{ old('pendidikan_id') == '1' ? 'selected':'' }} >SD</option>
+                                        <option value="2" {{ old('pendidikan_id') == '2' ? 'selected':'' }} >SMP</option>
+                                        <option value="3" {{ old('pendidikan_id') == '3' ? 'selected':'' }} >SMA/SMK</option>
+                                        <option value="4" {{ old('pendidikan_id') == '4' ? 'selected':'' }} >S1</option>
+                                        <option value="5" {{ old('pendidikan_id') == '5' ? 'selected':'' }} >S2</option>
+                                        <option value="6" {{ old('pendidikan_id') == '6' ? 'selected':'' }} >S3</option>
+                                        <option value="7" {{ old('pendidikan_id') == '7' ? 'selected':'' }} >Tidak Sekolah</option>
+                                    </select>
+                                    @error('pendidikan_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-12">

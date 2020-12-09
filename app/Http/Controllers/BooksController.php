@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Books;
+use App\Models\User;
+use App\Models\Employees;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BooksExport;
 
 class BooksController extends Controller
 {
@@ -26,7 +31,7 @@ class BooksController extends Controller
                 'pengarang' => 'required|max:30',
                 'penerbit' => 'required|max:50',
                 'tahun_terbit' => 'required',
-                'isbn' => 'required|max:10',
+                'isbn' => 'required|max:20',
                 'jumlah_buku' => 'required|max:5',
                 'lokasi' => 'required|max:50',
                 'tanggal_input' => 'required'
@@ -69,5 +74,10 @@ class BooksController extends Controller
     {
         Books::destroy($books->id);
         return redirect('/books')->with('pesan','Data buku berhasil dihapus');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new BooksExport, 'books.xlsx');
     }
 }

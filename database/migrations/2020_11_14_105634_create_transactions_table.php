@@ -15,11 +15,12 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_books');
-            $table->foreignId('nim');
+            $table->string('kode_transaksi');
+            $table->foreignId('members_id')->constrained()->onDelete('cascade');
+            $table->foreignId('books_id')->constrained()->onDelete('cascade');
             $table->date('tanggal_pinjam');
             $table->date('tanggal_kembali');
-            $table->string('status');
+            $table->enum('status', ['pinjam', 'kembali']);
             $table->timestamps();
         });
     }

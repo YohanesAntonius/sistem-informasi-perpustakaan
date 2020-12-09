@@ -16,10 +16,10 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
-            $table->string('pengarang');
-            $table->string('penerbit');
-            $table->char('tahun_terbit');
-            $table->char('isbn');
+            $table->string('pengarang')->nullable();
+            $table->string('penerbit')->nullable();
+            $table->char('tahun_terbit')->nullable();
+            $table->char('isbn', 25)->nullable();
             $table->char('jumlah_buku');
             $table->string('lokasi');
             $table->date('tanggal_input');

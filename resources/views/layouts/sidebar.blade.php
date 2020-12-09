@@ -5,7 +5,8 @@
 <div class="sidebar-wrapper">
   <ul class="nav">
     <li class="nav-item active  ">
-      <a class="nav-link" href="{{ url('/')}}">
+      {{-- <a class="nav-link" href="{{ url('/')}}"> --}}
+        <a class="nav-link" href="/dashboards">
         <i class="material-icons">dashboard</i>
         <p>Dashboard</p>
       </a>

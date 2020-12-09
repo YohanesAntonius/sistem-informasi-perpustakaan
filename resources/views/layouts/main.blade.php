@@ -617,6 +617,8 @@ The above copyright notice and this permission notice shall be included in all c
                 </ul>
             </div>
         </div> --}}
+        @yield('footer')
+        <script src="https://code.highcharts.com/highcharts.js"></script>
         <!--   Core JS Files   -->
         <script src="{{ url('/') }}/assets/js/core/jquery.min.js"></script>
         <script src="{{ url('/') }}/assets/js/core/popper.min.js"></script>

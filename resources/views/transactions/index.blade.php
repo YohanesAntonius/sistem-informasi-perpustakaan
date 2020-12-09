@@ -1,3 +1,13 @@
+@section('js')
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#table').DataTable({
+      "iDisplayLength": 50
+    });
+
+} );
+</script>
+@stop
 @extends('layouts.main')
 
 @section('container')
@@ -12,7 +22,7 @@
                         {{-- <p class="card-category"> Mau data lebih banyak ?</p> --}}
                     <a href="{{ url('/') }}/transactions/create" class="btn btn-secondary"> Tambah Data</a>
                     <a href="{{ url('/') }}/transactions/" class="btn btn-secondary"> Export to Excel</a>
-                    <a href="{{ url('/') }}/transactions/" class="btn btn-secondary"> Export To PDF</a>
+                    {{-- <a href="{{ url('/') }}/transactions/" class="btn btn-secondary"> Export To PDF</a> --}}
                     </div>
                     @if (session('pesan'))
                         <div class="alert alert-info">
@@ -22,29 +32,23 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-striped" id="table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>
-                                            No
-                                        </th>
-                                        <th>
-                                            Judul
-                                        </th>
-                                        <th>
-                                            Nim
+                                            Kode
                                         </th>
                                         <th>
                                             Nama
+                                        </th>
+                                        <th>
+                                            Judul
                                         </th>
                                         <th>
                                             Tanggal Pinjam
                                         </th>
                                         <th>
                                             Tanggal Kembali
-                                        </th>
-                                        <th>
-                                            Terlambat
                                         </th>
                                         <th>
                                             Status
@@ -56,19 +60,23 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($transactions as $transaksi)
+                                    @foreach ($datas as $data)
                                     <tr>
-                                        <td> {{ $loop->iteration }}</td>
-                                        <td> {{$transaksi->id_books}} </td>
-                                        <td> {{$transaksi->nim}} </td>
-                                        <td> {{$transaksi->nama}} </td>
-                                        <td> {{$transaksi->tanggal_pinjam}} </td>
-                                        <td> {{$transaksi->tanggal_kembali}} </td>
-                                        {{-- <td> {{$transaksi->status}} </td> --}}
-
+                                        {{-- <td> {{ $loop->iteration }}</td> --}}
+                                        <td> {{$data->kode_transaksi}} </td>
+                                        <td> {{$data->members_id}} </td>
+                                        <td> {{$data->books_id}} </td>
+                                        <td> {{date('d/m/y', strtotime($data->tanggal_pinjam))}} </td>
+                                        <td> {{date('d/m/y', strtotime($data->tanggal_kembali))}}</td>
                                         <td>
-                                            <a href="/transactions/{{$transaksi->id}}/kembali" class="btn btn-sm btn-sign-in">Kembali</a>
-                                            <a href="/transactions/{{$transaksi->id}}/perpanjang" class="btn btn-sm btn-danger">Perpanjang</a>
+                                          @if($data->status == 'pinjam')
+                                            <label class="badge badge-warning">Pinjam</label>
+                                          @else
+                                            <label class="badge badge-success">Kembali</label>
+                                          @endif</td>
+                                          <td>
+                                            <a href="/transactions/{{$data->id}}/kembali" class="btn btn-sm btn-success">Kembali</a>
+                                            <a href="/transactions/{{$data->id}}" class="btn btn-sm btn-danger">Hapus</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -81,5 +89,4 @@
         </div>
     </div>
 </div>
-
 @endsection

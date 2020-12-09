@@ -11,8 +11,8 @@
                         <h4 class="card-title ">Anggota</h4>
                         {{-- <p class="card-category"> Mau data lebih banyak ?</p> --}}
                     <a href="{{ url('/') }}/members/create" class="btn btn-secondary"> Tambah Data</a>
-                    <a href="{{ url('/') }}/laporan/laporan_anggota_excel" class="btn btn-secondary"> Export to Excel</a>
-                    <a href="{{ url('/') }}/members/" class="btn btn-secondary"> Export To PDF</a>
+                    <a href="{{ url('/') }}/members/exportExcel" class="btn btn-secondary"> Export to Excel</a>
+                    {{-- <a href="{{ url('/') }}/members/" class="btn btn-secondary"> Export To PDF</a> --}}
                     </div>
                     @if (session('pesan'))
                         <div class="alert alert-info">
@@ -22,7 +22,7 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-striped" id="table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>
@@ -62,8 +62,8 @@
                                         <td> {{$anggota->jenis_kelamin}} </td>
                                         <td> {{$anggota->prodi}} </td>
                                         <td>
-                                            <a href="/members/{{$anggota->nim}}/edit" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="/members/{{$anggota->nim}}" class="btn btn-sm btn-danger">Hapus</a>
+                                            <a href="/members/{{$anggota->id}}/edit" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="/members/{{$anggota->id}}" class="btn btn-sm btn-danger">Hapus</a>
                                         </td>
                                     </tr>
                                     @endforeach

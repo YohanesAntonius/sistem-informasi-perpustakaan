@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dashboard;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class PendidikanController extends Controller
 {
     //buat method index
     public function index()
     {
-        return view('layouts.main');
+        return view('pendidikan.index');
     }
 
     //buat method create

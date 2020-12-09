@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Members;
+use App\Exports\MembersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 class MembersController extends Controller
@@ -38,7 +40,7 @@ class MembersController extends Controller
         return redirect('/members')->with('pesan', 'Anggota berhasil ditambahkan');
 
         // Members::create($request->all());
-        // return redirect('/members')->with('pesan', 'Ditambahkan');
+        // return redirect('/member')->with('pesan', 'Ditambahkan');
     }
 
     public function show(Members $members)
@@ -54,9 +56,9 @@ class MembersController extends Controller
 
     public function update(Request $request, Members $members)
     {
-       Members::where('nim', $members->nim)
+       Members::where('id', $members->id)
        ->update([
-            // 'nim' => $request->nim,
+            'nim' => $request->nim,
             'nama' => $request->nama,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
@@ -71,8 +73,13 @@ class MembersController extends Controller
 
     public function destroy(Members $members)
     {
-        Members::destroy($members->nim);
+        Members::destroy($members->id);
         return redirect('/members')->with('pesan','Data anggota berhasil dihapus');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new MembersExport, 'members.xlsx');
     }
 
 }

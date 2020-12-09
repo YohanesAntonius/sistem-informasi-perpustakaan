@@ -12,8 +12,8 @@
                         <h4 class="card-title ">Buku</h4>
                         {{-- <p class="card-category"> Mau data lebih banyak ?</p> --}}
                     <a href="{{ url('/') }}/books/create" class="btn btn-secondary"> Tambah Data</a>
-                    <a href="{{ url('/') }}/books/" class="btn btn-secondary"> Export To Excel</a>
-                    <a href="{{ url('/') }}/books/" class="btn btn-secondary"> Export To PDF</a>
+                    <a href="{{ url('/') }}/books/export" class="btn btn-secondary"> Export To Excel</a>
+                    {{-- <a href="{{ url('/') }}/books/" class="btn btn-secondary"> Export To PDF</a> --}}
                     </div>
                     @if (session('pesan'))
                         <div class="alert alert-info">
@@ -23,7 +23,7 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class= "table table-striped" id="table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>
